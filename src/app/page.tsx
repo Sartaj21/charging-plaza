@@ -122,7 +122,7 @@ export default function Home() {
             className="absolute inset-0 -top-20"
           >
             <img
-              src="/images/plaza-render-sunset.jpg"
+              src="/images/plaza-sunset.jpeg"
               alt="Charging Plaza concept render at sunset"
               className="w-full h-[120%] object-cover"
             />
@@ -192,7 +192,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-accent/3 via-transparent to-accent/3 pointer-events-none" />
           <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 relative">
             {[
-              { value: '200+', label: 'Charging Bays' },
+              { value: 'Ultra-Fast', label: 'Charging Speeds' },
               { value: '350kW', label: 'Max Speed' },
               { value: '24/7', label: 'Always Open' },
               { value: '100%', label: 'Solar Powered' },
@@ -247,23 +247,23 @@ export default function Home() {
                 {
                   icon: <BatteryCharging className="h-5 w-5" />,
                   title: 'Passenger EV',
-                  desc: 'Dozens of ultra-fast chargers dedicated to cars and SUVs with plenty of pull-in space.',
+                  desc: 'Ultra-fast chargers dedicated to cars and SUVs with plenty of pull-in space.',
                   color: 'text-blue-600 bg-blue-50',
                   img: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&auto=format&fit=crop',
                 },
                 {
                   icon: <Truck className="h-5 w-5" />,
                   title: 'Heavy-Duty Trucks',
-                  desc: 'Massive pull-through bays engineered for commercial electric trucks. No unhooking trailers.',
+                  desc: 'Purpose-built bays engineered for commercial electric trucks and long-haul fleets.',
                   color: 'text-foreground bg-surface',
-                  img: 'https://images.unsplash.com/photo-1616432043562-3671ea2e5242?q=80&w=800&auto=format&fit=crop',
+                  img: '/images/plaza-campus-wide.jpeg',
                 },
                 {
                   icon: <Sun className="h-5 w-5" />,
                   title: 'Solar Resilience',
                   desc: 'Off-grid solar canopies and battery microgrids powering clean energy for your fleet.',
                   color: 'text-amber-600 bg-amber-50',
-                  img: '/images/plaza-render-closeup.png',
+                  img: '/images/plaza-solar-close.jpeg',
                 },
                 {
                   icon: <Shield className="h-5 w-5" />,
@@ -311,7 +311,7 @@ export default function Home() {
         >
           <div className="rounded-3xl overflow-hidden aspect-[21/9] relative">
             <img
-              src="/images/plaza-render-solar.jpg"
+              src="/images/plaza-solar-farm.jpeg"
               alt="Charging Plaza aerial view with solar farm"
               className="w-full h-full object-cover"
             />
@@ -399,8 +399,8 @@ export default function Home() {
               >
                 <div className="rounded-3xl overflow-hidden">
                   <img
-                    src="/images/plaza-render-aerial.jpg"
-                    alt="Charging Plaza concept render with amenities"
+                    src="/images/plaza-entrance.jpeg"
+                    alt="Charging Plaza entrance render"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -415,7 +415,7 @@ export default function Home() {
         <section id="fleet" className="py-20 md:py-28 relative overflow-hidden">
           <div className="absolute inset-0">
             <img
-              src="/images/plaza-render-full.jpg"
+              src="/images/plaza-aerial-small.png"
               alt="Charging Plaza full campus render"
               className="w-full h-full object-cover"
             />
@@ -449,8 +449,8 @@ export default function Home() {
                 className="text-white/60 mb-10 leading-relaxed"
               >
                 Located along major freight corridors, our plazas provide
-                uncompromising infrastructure for commercial electric fleets.
-                Massive pull-through lanes and a reservation system to book
+                uncompromising infrastructure for commercial electric fleets
+                with dedicated truck bays and a reservation system to book
                 charging windows ahead of time.
               </motion.p>
               <motion.div variants={fadeUp} custom={3}>

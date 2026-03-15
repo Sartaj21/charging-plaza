@@ -41,6 +41,34 @@ const scaleIn = {
   },
 };
 
+/* ─── SITE CONFIG — edit these to update the site ─── */
+const CONTACT_EMAIL = 'M2@chargingplaza.com';
+
+const TIMELINE = [
+  {
+    quarter: 'Q3 2026',
+    title: 'Groundbreaking & Foundation',
+    desc: 'Site clearing and foundation work for the main building and amenities.',
+    status: 'Upcoming',
+    active: true,
+  },
+  {
+    quarter: 'Q4 2026',
+    title: 'Structure & Chargers',
+    desc: 'Solar canopy erection, convenience store framing, and charger installation.',
+    status: 'Planned',
+    active: false,
+  },
+  {
+    quarter: 'Q1 2027',
+    title: 'Grand Opening',
+    desc: 'Full commissioning with active stores, showers, laundry, and all chargers live.',
+    status: 'Planned',
+    active: false,
+  },
+];
+/* ─── END CONFIG ─── */
+
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -79,7 +107,7 @@ export default function Home() {
               Timeline
             </Link>
             <a
-              href="mailto:M2@chargingplaza.com"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="ml-2 px-4 py-2 rounded-full bg-foreground text-white text-sm font-medium hover:bg-foreground/90 transition-colors"
             >
               Get in Touch
@@ -107,7 +135,7 @@ export default function Home() {
               <Link href="#amenities" className="py-2" onClick={() => setMobileMenuOpen(false)}>Amenities</Link>
               <Link href="#fleet" className="py-2" onClick={() => setMobileMenuOpen(false)}>Fleet</Link>
               <Link href="#timeline" className="py-2" onClick={() => setMobileMenuOpen(false)}>Timeline</Link>
-              <a href="mailto:M2@chargingplaza.com" className="py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>Get in Touch</a>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>Get in Touch</a>
             </div>
           </motion.div>
         )}
@@ -185,34 +213,6 @@ export default function Home() {
 
           {/* Decorative gradient blobs */}
           <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-accent/10 via-teal-400/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-        </section>
-
-        {/* Stats bar */}
-        <section className="border-y border-border bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-accent/3 via-transparent to-accent/3 pointer-events-none" />
-          <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 relative">
-            {[
-              { value: 'Ultra-Fast', label: 'Charging Speeds' },
-              { value: '350kW', label: 'Max Speed' },
-              { value: '24/7', label: 'Always Open' },
-              { value: '100%', label: 'Solar Powered' },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                custom={i}
-                className="text-center"
-              >
-                <div className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted mt-1.5">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
         </section>
 
         {/* Charging Infrastructure */}
@@ -455,7 +455,7 @@ export default function Home() {
               </motion.p>
               <motion.div variants={fadeUp} custom={3}>
                 <a
-                  href="mailto:M2@chargingplaza.com?subject=Fleet%20Rate%20Inquiry"
+                  href={`mailto:${CONTACT_EMAIL}?subject=Fleet%20Rate%20Inquiry`}
                   className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-foreground font-medium text-sm hover:bg-white/90 transition-all duration-300 hover:shadow-xl hover:shadow-white/20"
                 >
                   <Mail className="h-4 w-4" />
@@ -495,29 +495,7 @@ export default function Home() {
               variants={stagger}
               className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto"
             >
-              {[
-                {
-                  quarter: 'Q3 2026',
-                  title: 'Groundbreaking & Foundation',
-                  desc: 'Site clearing and foundation work for the main building and amenities.',
-                  status: 'Upcoming',
-                  active: true,
-                },
-                {
-                  quarter: 'Q4 2026',
-                  title: 'Structure & Chargers',
-                  desc: 'Solar canopy erection, convenience store framing, and charger installation.',
-                  status: 'Planned',
-                  active: false,
-                },
-                {
-                  quarter: 'Q1 2027',
-                  title: 'Grand Opening',
-                  desc: 'Full commissioning with active stores, showers, laundry, and all chargers live.',
-                  status: 'Planned',
-                  active: false,
-                },
-              ].map((phase) => (
+              {TIMELINE.map((phase) => (
                 <motion.div
                   key={phase.quarter}
                   variants={fadeUp}
@@ -578,7 +556,7 @@ export default function Home() {
               </motion.p>
               <motion.div variants={fadeUp} custom={3} className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
-                  href="mailto:M2@chargingplaza.com"
+                  href={`mailto:${CONTACT_EMAIL}`}
                   className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-foreground text-white font-medium text-sm hover:bg-foreground/90 transition-all duration-300 hover:shadow-xl hover:shadow-foreground/20"
                 >
                   <Mail className="h-4 w-4" />
@@ -587,7 +565,7 @@ export default function Home() {
                 </a>
               </motion.div>
               <motion.p variants={fadeUp} custom={4} className="text-xs text-muted mt-4">
-                M2@chargingplaza.com
+                {CONTACT_EMAIL}
               </motion.p>
             </motion.div>
           </div>
@@ -605,9 +583,9 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-6 text-sm text-muted">
-            <a href="mailto:M2@chargingplaza.com" className="hover:text-foreground transition-colors">Press</a>
-            <a href="mailto:M2@chargingplaza.com" className="hover:text-foreground transition-colors">Investors</a>
-            <a href="mailto:M2@chargingplaza.com" className="hover:text-foreground transition-colors">Contact</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-foreground transition-colors">Press</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-foreground transition-colors">Investors</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-foreground transition-colors">Contact</a>
           </div>
 
           <p className="text-xs text-muted">

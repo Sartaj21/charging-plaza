@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   ArrowRight,
   BatteryCharging,
@@ -15,8 +15,9 @@ import {
   Shield,
   Menu,
   X,
+  Mail,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -31,8 +32,24 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: [0, 0, 0.2, 1] as const },
+  },
+};
+
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroImageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <div className="flex flex-col min-h-screen text-foreground bg-background">
@@ -61,12 +78,12 @@ export default function Home() {
             <Link href="#timeline" className="hover:text-foreground transition-colors">
               Timeline
             </Link>
-            <Link
-              href="#contact"
+            <a
+              href="mailto:M2@chargingplaza.com"
               className="ml-2 px-4 py-2 rounded-full bg-foreground text-white text-sm font-medium hover:bg-foreground/90 transition-colors"
             >
               Get in Touch
-            </Link>
+            </a>
           </nav>
 
           <button
@@ -90,22 +107,35 @@ export default function Home() {
               <Link href="#amenities" className="py-2" onClick={() => setMobileMenuOpen(false)}>Amenities</Link>
               <Link href="#fleet" className="py-2" onClick={() => setMobileMenuOpen(false)}>Fleet</Link>
               <Link href="#timeline" className="py-2" onClick={() => setMobileMenuOpen(false)}>Timeline</Link>
-              <Link href="#contact" className="py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>Get in Touch</Link>
+              <a href="mailto:M2@chargingplaza.com" className="py-2 font-medium" onClick={() => setMobileMenuOpen(false)}>Get in Touch</a>
             </div>
           </motion.div>
         )}
       </header>
 
       <main className="flex-1">
-        {/* Hero */}
-        <section className="relative overflow-hidden bg-white">
-          <div className="max-w-6xl mx-auto px-6 pt-20 pb-24 md:pt-32 md:pb-36">
+        {/* Hero with parallax */}
+        <section ref={heroRef} className="relative overflow-hidden min-h-[90vh] flex items-center">
+          {/* Parallax background image */}
+          <motion.div
+            style={{ y: heroImageY }}
+            className="absolute inset-0 -top-20"
+          >
+            <img
+              src="/images/plaza-render-sunset.jpg"
+              alt="Charging Plaza concept render at sunset"
+              className="w-full h-[120%] object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/40" />
+          </motion.div>
+
+          <motion.div style={{ opacity: heroOpacity }} className="relative max-w-6xl mx-auto px-6 py-20">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={stagger}
-              className="max-w-3xl"
+              className="max-w-2xl"
             >
               <motion.div variants={fadeUp} custom={0}>
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent text-xs font-medium mb-6">
@@ -117,11 +147,13 @@ export default function Home() {
               <motion.h1
                 variants={fadeUp}
                 custom={1}
-                className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1] mb-6"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6"
               >
                 The future of travel,
                 <br />
-                <span className="text-accent">powered by the sun.</span>
+                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                  powered by the sun.
+                </span>
               </motion.h1>
 
               <motion.p
@@ -136,45 +168,48 @@ export default function Home() {
               <motion.div variants={fadeUp} custom={3} className="flex flex-wrap gap-4">
                 <a
                   href="#timeline"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-white font-medium text-sm hover:bg-foreground/90 transition-colors"
+                  className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-white font-medium text-sm hover:bg-foreground/90 transition-all duration-300 hover:shadow-xl hover:shadow-foreground/20"
                 >
-                  View Progress <ArrowRight className="h-4 w-4" />
+                  View Progress
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
                 <a
                   href="#charging"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-sm font-medium hover:bg-surface transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border bg-white/80 backdrop-blur-sm text-sm font-medium hover:bg-white hover:border-foreground/20 transition-all duration-300"
                 >
                   Learn More
                 </a>
               </motion.div>
             </motion.div>
-          </div>
+          </motion.div>
 
-          {/* Decorative gradient blob */}
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-accent/8 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" />
+          {/* Decorative gradient blobs */}
+          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-accent/10 via-teal-400/5 to-transparent rounded-full blur-3xl pointer-events-none" />
         </section>
 
         {/* Stats bar */}
-        <section className="border-y border-border bg-white">
-          <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <section className="border-y border-border bg-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/3 via-transparent to-accent/3 pointer-events-none" />
+          <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 relative">
             {[
               { value: '200+', label: 'Charging Bays' },
               { value: '350kW', label: 'Max Speed' },
               { value: '24/7', label: 'Always Open' },
               { value: '100%', label: 'Solar Powered' },
-            ].map((stat) => (
+            ].map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
+                custom={i}
                 className="text-center"
               >
-                <div className="text-2xl md:text-3xl font-bold tracking-tight">
+                <div className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
                   {stat.value}
                 </div>
-                <div className="text-sm text-muted mt-1">{stat.label}</div>
+                <div className="text-sm text-muted mt-1.5">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -214,43 +249,80 @@ export default function Home() {
                   title: 'Passenger EV',
                   desc: 'Dozens of ultra-fast chargers dedicated to cars and SUVs with plenty of pull-in space.',
                   color: 'text-blue-600 bg-blue-50',
+                  img: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&auto=format&fit=crop',
                 },
                 {
                   icon: <Truck className="h-5 w-5" />,
                   title: 'Heavy-Duty Trucks',
                   desc: 'Massive pull-through bays engineered for commercial electric trucks. No unhooking trailers.',
                   color: 'text-foreground bg-surface',
+                  img: 'https://images.unsplash.com/photo-1616432043562-3671ea2e5242?q=80&w=800&auto=format&fit=crop',
                 },
                 {
                   icon: <Sun className="h-5 w-5" />,
                   title: 'Solar Resilience',
                   desc: 'Off-grid solar canopies and battery microgrids powering clean energy for your fleet.',
                   color: 'text-amber-600 bg-amber-50',
+                  img: '/images/plaza-render-closeup.png',
                 },
                 {
                   icon: <Shield className="h-5 w-5" />,
                   title: 'Universal Plugs',
                   desc: 'NACS and CCS natively supported on all dispensers — no adapters, no accounts, no hassle.',
                   color: 'text-emerald-600 bg-emerald-50',
+                  img: 'https://images.unsplash.com/photo-1617886322168-72b886573c35?q=80&w=800&auto=format&fit=crop',
                 },
               ].map((card) => (
                 <motion.div
                   key={card.title}
                   variants={fadeUp}
-                  className="group p-6 rounded-2xl border border-border bg-card hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
+                  whileHover={{ y: -6, transition: { duration: 0.3, ease: [0.2, 0, 0, 1] as const } }}
+                  className="group rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:shadow-accent/8 transition-shadow duration-500"
                 >
-                  <div
-                    className={`w-10 h-10 rounded-xl ${card.color} flex items-center justify-center mb-5`}
-                  >
-                    {card.icon}
+                  <div className="aspect-[16/10] overflow-hidden">
+                    <img
+                      src={card.img}
+                      alt={card.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
                   </div>
-                  <h3 className="font-semibold text-base mb-2">{card.title}</h3>
-                  <p className="text-sm text-muted leading-relaxed">{card.desc}</p>
+                  <div className="p-6">
+                    <div
+                      className={`w-10 h-10 rounded-xl ${card.color} flex items-center justify-center mb-4`}
+                    >
+                      {card.icon}
+                    </div>
+                    <h3 className="font-semibold text-base mb-2">{card.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{card.desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
           </div>
         </section>
+
+        {/* Full-width image break */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={scaleIn}
+          className="max-w-6xl mx-auto px-6"
+        >
+          <div className="rounded-3xl overflow-hidden aspect-[21/9] relative">
+            <img
+              src="/images/plaza-render-solar.jpg"
+              alt="Charging Plaza aerial view with solar farm"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="absolute bottom-8 left-8 right-8 text-white">
+              <p className="text-lg md:text-2xl font-semibold max-w-lg">
+                &ldquo;Building the infrastructure that makes electric travel effortless.&rdquo;
+              </p>
+            </div>
+          </div>
+        </motion.section>
 
         {/* Amenities */}
         <section id="amenities" className="py-20 md:py-28 bg-white">
@@ -302,7 +374,8 @@ export default function Home() {
                     <motion.div
                       key={item.title}
                       variants={fadeUp}
-                      className="flex items-start gap-4"
+                      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                      className="flex items-start gap-4 p-3 -ml-3 rounded-xl hover:bg-surface/60 transition-colors duration-300 cursor-default"
                     >
                       <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0`}>
                         {item.icon}
@@ -316,39 +389,75 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
+              {/* Image collage */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="relative"
+                variants={stagger}
+                className="relative grid grid-cols-2 gap-4"
               >
-                <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-surface">
-                  <img
-                    src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop"
-                    alt="Modern coffee shop interior"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <motion.div variants={fadeUp} className="space-y-4">
+                  <div className="rounded-2xl overflow-hidden aspect-[3/4]">
+                    <img
+                      src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop"
+                      alt="Modern lounge and cafe interior"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                  <div className="rounded-2xl overflow-hidden aspect-square">
+                    <img
+                      src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=800&auto=format&fit=crop"
+                      alt="Convenience store aisle"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                </motion.div>
+                <motion.div variants={fadeUp} custom={1} className="space-y-4 pt-8">
+                  <div className="rounded-2xl overflow-hidden aspect-square">
+                    <img
+                      src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=800&auto=format&fit=crop"
+                      alt="Clean shower facilities"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                  <div className="rounded-2xl overflow-hidden aspect-[3/4]">
+                    <img
+                      src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop"
+                      alt="Coffee and tea service"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                </motion.div>
                 <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/10 rounded-3xl -z-10" />
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-teal-400/10 rounded-3xl -z-10" />
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Fleet */}
-        <section id="fleet" className="py-20 md:py-28 bg-foreground text-white">
-          <div className="max-w-6xl mx-auto px-6">
+        {/* Fleet - with background image */}
+        <section id="fleet" className="py-20 md:py-28 relative overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              src="/images/plaza-render-full.jpg"
+              alt="Charging Plaza full campus render"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-foreground/85 backdrop-blur-sm" />
+          </div>
+
+          <div className="max-w-6xl mx-auto px-6 relative">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={stagger}
-              className="max-w-2xl mx-auto text-center"
+              className="max-w-2xl mx-auto text-center text-white"
             >
               <motion.div
                 variants={fadeUp}
-                className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6"
+                className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-6 ring-1 ring-white/20"
               >
                 <Truck className="h-6 w-6 text-accent" />
               </motion.div>
@@ -371,10 +480,12 @@ export default function Home() {
               </motion.p>
               <motion.div variants={fadeUp} custom={3}>
                 <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-foreground font-medium text-sm hover:bg-white/90 transition-colors"
+                  href="mailto:M2@chargingplaza.com?subject=Fleet%20Rate%20Inquiry"
+                  className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-foreground font-medium text-sm hover:bg-white/90 transition-all duration-300 hover:shadow-xl hover:shadow-white/20"
                 >
-                  Inquire About Fleet Rates <ArrowRight className="h-4 w-4" />
+                  <Mail className="h-4 w-4" />
+                  Inquire About Fleet Rates
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </motion.div>
             </motion.div>
@@ -435,10 +546,11 @@ export default function Home() {
                 <motion.div
                   key={phase.quarter}
                   variants={fadeUp}
-                  className={`relative p-6 rounded-2xl border ${
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className={`relative p-6 rounded-2xl border transition-shadow duration-300 ${
                     phase.active
-                      ? 'border-accent bg-accent/5'
-                      : 'border-border bg-card'
+                      ? 'border-accent bg-accent/5 hover:shadow-lg hover:shadow-accent/10'
+                      : 'border-border bg-card hover:shadow-lg hover:shadow-black/5'
                   }`}
                 >
                   {phase.active && (
@@ -462,8 +574,9 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <section id="contact" className="py-20 md:py-28 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
+        <section id="contact" className="py-24 md:py-32 bg-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-teal-400/5 pointer-events-none" />
+          <div className="max-w-6xl mx-auto px-6 relative">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -471,24 +584,36 @@ export default function Home() {
               variants={stagger}
               className="text-center max-w-xl mx-auto"
             >
+              <motion.div
+                variants={fadeUp}
+                className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-6"
+              >
+                <Mail className="h-6 w-6 text-accent" />
+              </motion.div>
               <motion.h2
                 variants={fadeUp}
+                custom={1}
                 className="text-3xl md:text-4xl font-bold tracking-tight mb-4"
               >
                 Stay in the loop
               </motion.h2>
-              <motion.p variants={fadeUp} custom={1} className="text-muted mb-8">
+              <motion.p variants={fadeUp} custom={2} className="text-muted mb-8">
                 Be the first to know when our flagship location opens and get
                 early access to fleet pricing.
               </motion.p>
-              <motion.div variants={fadeUp} custom={2}>
+              <motion.div variants={fadeUp} custom={3} className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
-                  href="mailto:hello@chargingplaza.com"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-white font-medium text-sm hover:bg-foreground/90 transition-colors"
+                  href="mailto:M2@chargingplaza.com"
+                  className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-foreground text-white font-medium text-sm hover:bg-foreground/90 transition-all duration-300 hover:shadow-xl hover:shadow-foreground/20"
                 >
-                  Contact Us <ArrowRight className="h-4 w-4" />
+                  <Mail className="h-4 w-4" />
+                  Contact Us
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </motion.div>
+              <motion.p variants={fadeUp} custom={4} className="text-xs text-muted mt-4">
+                M2@chargingplaza.com
+              </motion.p>
             </motion.div>
           </div>
         </section>
@@ -505,9 +630,9 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-6 text-sm text-muted">
-            <a href="#" className="hover:text-foreground transition-colors">Press</a>
-            <a href="#" className="hover:text-foreground transition-colors">Investors</a>
-            <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+            <a href="mailto:M2@chargingplaza.com" className="hover:text-foreground transition-colors">Press</a>
+            <a href="mailto:M2@chargingplaza.com" className="hover:text-foreground transition-colors">Investors</a>
+            <a href="mailto:M2@chargingplaza.com" className="hover:text-foreground transition-colors">Contact</a>
           </div>
 
           <p className="text-xs text-muted">

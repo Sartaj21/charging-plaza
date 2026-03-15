@@ -389,46 +389,21 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
-              {/* Image collage */}
+              {/* Plaza render */}
               <motion.div
-                initial="hidden"
-                whileInView="visible"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                variants={stagger}
-                className="relative grid grid-cols-2 gap-4"
+                transition={{ duration: 0.6 }}
+                className="relative"
               >
-                <motion.div variants={fadeUp} className="space-y-4">
-                  <div className="rounded-2xl overflow-hidden aspect-[3/4]">
-                    <img
-                      src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop"
-                      alt="Modern lounge and cafe interior"
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="rounded-2xl overflow-hidden aspect-square">
-                    <img
-                      src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=80&w=800&auto=format&fit=crop"
-                      alt="Convenience store aisle"
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                </motion.div>
-                <motion.div variants={fadeUp} custom={1} className="space-y-4 pt-8">
-                  <div className="rounded-2xl overflow-hidden aspect-square">
-                    <img
-                      src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=800&auto=format&fit=crop"
-                      alt="Clean shower facilities"
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="rounded-2xl overflow-hidden aspect-[3/4]">
-                    <img
-                      src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop"
-                      alt="Coffee and tea service"
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                </motion.div>
+                <div className="rounded-3xl overflow-hidden">
+                  <img
+                    src="/images/plaza-render-aerial.jpg"
+                    alt="Charging Plaza concept render with amenities"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/10 rounded-3xl -z-10" />
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-teal-400/10 rounded-3xl -z-10" />
               </motion.div>
